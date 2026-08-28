@@ -1,0 +1,425 @@
+@import url("https://fonts.cdnfonts.com/css/monument-extended");
+
+/* Скрываем стандартные маркеры списков у details/summary */
+summary::-webkit-details-marker {
+  display: none;
+}
+summary {
+  list-style: none;
+}
+
+/* Кнопка --- Безкоштовний урок --- */
+/* Внешний контейнер кнопки */
+.neon-btn {
+  position: relative;
+  padding: 10px 22px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  background: transparent;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  outline: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* overflow: visible позволяет искоркам вылетать ЗА пределы кнопки */
+  overflow: visible !important;
+  z-index: 1;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.3s ease;
+  height: 42px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+/* Изолированная рамка с вращающимся неоном */
+.neon-btn-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  overflow: hidden; /* Обрезаем вращающийся луч СТРОГО внутри контура кнопки */
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Вращающийся неоновый градиент */
+.neon-btn-bg::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(transparent, #00a2ff, #00ffff, transparent 30%);
+  animation: rotateBorder 4s linear infinite;
+}
+
+/* Темная подложка кнопки */
+.neon-btn-bg::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  background: #0d1527;
+  border-radius: 10px;
+  z-index: 1;
+  transition: background 0.3s ease;
+}
+
+/* Текст кнопки */
+.neon-btn .btn-content {
+  position: relative;
+  z-index: 2;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  background: linear-gradient(90deg, #ffffff, #a5f3fc);
+  -webkit-background-clip: text;
+  background-clip: text; /* Добавьте эту строку для устранения предупреждения */
+  -webkit-text-fill-color: transparent;
+  pointer-events: none;
+}
+
+/* Ховер эффекты */
+.neon-btn:hover {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow:
+    0 0 16px rgba(0, 162, 255, 0.5),
+    0 0 30px rgba(0, 255, 255, 0.25);
+}
+
+.neon-btn:hover .neon-btn-bg::after {
+  background: #111d35;
+}
+
+.neon-btn:active {
+  transform: translateY(1px) scale(0.97);
+}
+
+@keyframes rotateBorder {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Стили искорок (вылетают наружу за счет overflow: visible) */
+.sparkle-particle {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  z-index: 999;
+  animation: explodeSparkle 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes explodeSparkle {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--tx), var(--ty)) scale(0);
+    opacity: 0;
+  }
+}
+
+/* Адаптив для мобильных */
+@media (max-width: 768px) {
+  .neon-btn {
+    padding: 8px 16px;
+    font-size: 13px;
+    border-radius: 10px;
+    height: 36px;
+  }
+  .neon-btn-bg {
+    border-radius: 10px;
+  }
+  .neon-btn-bg::after {
+    border-radius: 8px;
+  }
+}
+
+/* ----- Перемикач мови UA / EN ----- */
+.lang-btn {
+  cursor: pointer;
+  background: transparent;
+}
+.lang-btn.active {
+  color: #ffffff;
+  background: #1fa1e7;
+  box-shadow: 0 2px 8px rgba(31, 161, 231, 0.4);
+}
+/* ----- Карточки учителей ---- */
+/* Карусель и 3D-карточки */
+.team-carousel {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 20px 10px;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.team-carousel::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.card-wrapper {
+  scroll-snap-align: center;
+  flex: 0 0 280px;
+  max-width: 280px;
+  perspective: 1000px;
+}
+
+.team-card {
+  position: relative;
+  width: 100%;
+  height: 440px;
+  border-radius: 20px;
+  background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  transform-style: preserve-3d;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.team-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(56, 189, 248, 0.15),
+    transparent 40%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  border-radius: 20px;
+}
+
+.card-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  filter: brightness(0.95);
+  transform: translateZ(0px);
+}
+
+.card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(15, 23, 42, 0.3) 0%,
+    rgba(15, 23, 42, 0.1) 40%,
+    rgba(11, 17, 32, 0.95) 85%
+  );
+  pointer-events: none;
+}
+
+.card-logo {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 5px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(8px);
+  z-index: 3;
+  transform: translateZ(25px);
+}
+
+.card-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.card-info {
+  position: absolute;
+  bottom: 64px;
+  left: 18px;
+  right: 18px;
+  z-index: 3;
+  transform: translateZ(40px);
+}
+
+.card-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 2px;
+}
+
+.card-role {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin-bottom: 6px;
+}
+
+.card-subject {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  padding: 2px 8px;
+  border-radius: 20px;
+  text-transform: uppercase;
+}
+
+.card-socials {
+  position: absolute;
+  bottom: 16px;
+  left: 18px;
+  display: flex;
+  gap: 8px;
+  z-index: 4;
+  transform: translateZ(50px);
+}
+
+.social-link {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.social-link:hover {
+  background: #38bdf8;
+  color: #0f172a;
+}
+
+.details-btn {
+  position: absolute;
+  bottom: 16px;
+  right: 18px;
+  z-index: 4;
+  transform: translateZ(50px);
+  background: rgba(56, 189, 248, 0.2);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: #38bdf8;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 8px;
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.details-btn:hover {
+  background: #38bdf8;
+  color: #0f172a;
+}
+
+.details-panel {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  z-index: 5;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.95);
+  transition: all 0.25s ease;
+}
+
+.details-panel.active {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+}
+
+.details-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.details-panel h4 {
+  font-size: 1rem;
+  color: #38bdf8;
+  margin-bottom: 10px;
+}
+
+.details-item {
+  font-size: 0.8rem;
+  color: #e2e8f0;
+  margin-bottom: 6px;
+}
+
+.details-desc {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 8px;
+}
+
+/* Адаптивные правила ховера */
+@media (hover: hover) and (pointer: fine) {
+  .team-card:hover {
+    box-shadow: -10px 20px 30px rgba(0, 0, 0, 0.5);
+  }
+  .team-card:hover::after {
+    opacity: 1;
+  }
+}
+
+@media (hover: none) {
+  .team-card:hover {
+    transform: none !important;
+  }
+}
+/* О нас*/
+.about-section {
+  overflow: hidden; /* Обязательно! Скрывает элементы, уехавшие за край */
+}
+
+.scroll-bound {
+  will-change: transform;
+  transition: none !important;
+  -webkit-font-smoothing: antialiased;
+  backface-visibility: hidden;
+}
